@@ -1,6 +1,19 @@
 
-CREATE ROLE app_read NOLOGIN;
-CREATE ROLE app_write NOLOGIN;
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_roles WHERE rolname = 'app_read'
+    ) THEN
+        CREATE ROLE app_read NOLOGIN;
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_roles WHERE rolname = 'app_write'
+    ) THEN
+        CREATE ROLE app_write NOLOGIN;
+    END IF;
+END
+$$;
 
 GRANT USAGE ON SCHEMA public TO app_read, app_write;
 
